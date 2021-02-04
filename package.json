@@ -1,0 +1,14 @@
+{
+  "name": "arc-buckets-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "NearSt <dev@near.st>",
+  "license": "ISC",
+  "dependencies": {
+    "s3rver": "^3.6.1"
+  },
+  "peerDependencies": {
+    "aws-sdk": "^2.804.0"
+  }
+}
