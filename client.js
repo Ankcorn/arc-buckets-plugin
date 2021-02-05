@@ -11,7 +11,7 @@ const config = runningLocally ? {
 } : {};
 
 module.exports = {
-	s3: new S3({ region: process.env.AWS_DEFAULT_REGION, s3ForcePathStyle: true, ...config }),
+	buckets: new S3({ region: process.env.AWS_DEFAULT_REGION, s3ForcePathStyle: true, ...config }),
 	// to eventually become real service descovery or something
 	tableNameHelper: (name) => `${name}-${process.env.NODE_ENV}`
 } 
