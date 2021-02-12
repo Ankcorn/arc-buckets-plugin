@@ -1,21 +1,12 @@
-const util = require('util');
+process.env.NODE_ENV = 'testing';
+const plugin = require('./index');
+const client = require('./client');
+plugin.sandbox.start({ inv: { _project: { arc: { buckets: ['bucket-1'] }}}}).then(async () => {
+	console.log('hi')
 
-function start(callback) {
-	callback(null,'hi')
-}
-
-async function start1() {
-	return 'hi'
-}
-
-async function runBoth(functions) {
-	for(let func of functions) {
-		const isAsync = func.constructor.name === "AsyncFunction";
-		let unresolvedPromise = isAsync ? func() : util.promisify(func)();
-		const result = await unresolvedPromise;
-		console.log(result)
-	}
-}
-
-
-runBoth([start,start1]);
+	await client.buckets.upload({
+		Bucket: client.tableNameHelper('bucket-1'),
+		Body: 'test',
+		Key: 'wtf.txt'
+	}).promise()
+}).catch(e => console.log(e))
