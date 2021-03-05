@@ -1,0 +1,16 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "dev": "sandbox"
+  },
+  "author": "Thomas Ankcorn <thomasankcorn@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@architect/architect": "^8.5.0-RC.0",
+    "arc-buckets-plugin": "0.0.2"
+  }
+}

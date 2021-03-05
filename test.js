@@ -1,8 +1,36 @@
 process.env.NODE_ENV = 'testing';
-const plugin = require('./index');
+process.env.AWS_DEFAULT_REGION = 'eu-west-1';
+const parser = require('@architect/parser')
+const plugin = require('./src/index');
 const client = require('./client');
-plugin.sandbox.start({ inv: { _project: { arc: { buckets: ['bucket-1'] }}}}).then(async () => {
-	console.log('hi')
+
+const app = `
+@app
+my-arc-app
+
+@buckets
+bucket-1 s3:ObjectCreated:*
+bucket-2
+
+@http
+/hello
+
+@plugins
+arc-buckets-plugin
+`;
+
+const config = parser(app)
+console.log(config);
+
+const inventory = {
+	inv: {
+		_project: {
+			src: 'test'
+		}
+	}
+}
+
+plugin.sandbox.start(config, inventory).then(async () => {
 
 	await client.buckets.upload({
 		Bucket: client.tableNameHelper('bucket-1'),
