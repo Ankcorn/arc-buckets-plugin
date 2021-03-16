@@ -6,12 +6,8 @@ get /
 
 @buckets
 one 
-	# triggers s3:ObjectCreated:*
-	visibility private
-	# existing true
 
 two
-	visibilty public
 
 three
 

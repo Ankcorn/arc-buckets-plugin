@@ -6,7 +6,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "sandbox",
-    "dry-run": "arc deploy --dry-run"
+    "create": "arc create",
+    "dry-run": "arc deploy --dry-run",
+    "deploy": "arc deploy"
   },
   "author": "Thomas Ankcorn <thomasankcorn@gmail.com>",
   "license": "ISC",

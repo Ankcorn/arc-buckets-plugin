@@ -1,53 +1,57 @@
 const S3rver = require('s3rver');
-// const path = require('path');
-// const { invokeLambda } = require('@architect/sandbox');
+const path = require('path');
 const { toLogicalID } = require('@architect/utils');
+const createClients = require('./client');
 const defaultLocalOptions = {
     port: 4569,
     address: 'localhost',
     directory: './buckets',
-    accessKeyId: 'S3RVER',
-    secretAccessKey: 'S3RVER',
+    accessKeyId: 'I_AM_ARCHITECT',
+    secretAccessKey: 'I_AM_ARCHITECT',
     resetOnClose: true
 };
 let s3Instance;
 module.exports = {
-    package ({ arc, cloudformation, stage = 'staging', inventory }) {
-        console.log(arc, cloudformation);
+    package ({ arc, cloudformation, stage = 'staging' }) {
         if (!arc.buckets) {
             return cloudformation;
         }
-        console.log(toLogicalID('blahah'));
-        // for (let bucket of arc.buckets) {
-
-        //     sam.resources[bucket] = {
-        //         Type: 'AWS::S3::Bucket',
-        //         Properties: {
-        //             BucketName: `arc-${bucket}-${stage}`
-        //         }
-        //     };
-        // }
-
+        const [ stackName ] = arc.app;
+        console.log(cloudformation.Resources.Role.Properties.Policies);
+        for (let bucket of arc.buckets) {
+            const bucketResourceName = `PluginBucket${toLogicalID(bucket)}`;
+            cloudformation.Resources[bucketResourceName] = {
+                Type: 'AWS::S3::Bucket',
+                Properties: {
+                    BucketName: `${stackName}-${bucket}-${stage}`
+                }
+            };
+        }
         return cloudformation;
     },
-    //     pluginFunctions: function createBucketEventHandlers (arc, inventory) {
+    pluginFunctions ({ arc, inventory }) {
+        console.log(arc);
+        if (!arc.buckets) return [];
+        const [ stackName ] = arc.app;
+        const cwd = inventory.inv._project.src;
 
-    //         const cwd = inventory.inv._project.src;
-    //         return arc.buckets.filter(bucket => bucket.length === 2).map(([ bucket ]) => {
-    //             let rulesSrc = path.join(cwd, 'src', 'buckets', bucket);
-    //             return {
-    //                 src: rulesSrc,
-    //                 body: `exports.handler = async function (event) {
-    //   console.log(event);
-    // };`
-    //             };
-    //         });
-    //     },
+
+        return [ {
+            src: path.join(cwd, './src/shared/buckets'),
+            body: createClients(arc.buckets.map(name => ({
+                clientName: name,
+                bucketName: '${stackName}-${name}-'
+            })))
+        } ];
+    },
     sandbox: {
-        async start (arc) {
+        async start ({ arc }) {
+            console.log(arc);
+            const [ stackName ] = arc.app;
             if (arc.buckets) {
+
                 console.log(arc.buckets);
-                s3Instance = new S3rver({ configureBuckets: arc.buckets.map(([ b ]) => ({ name: `${b}-testing` })), ...defaultLocalOptions });
+                s3Instance = new S3rver({ configureBuckets: arc.buckets.map((bucketName) => ({ name: `${stackName}-${bucketName}-testing` })), ...defaultLocalOptions });
                 await s3Instance.run();
                 console.log('sandbox has started');
             }

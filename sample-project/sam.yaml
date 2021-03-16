@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Exported by architect/package@6.0.4 on 2021-03-15T21:09:58.688Z
+Description: Exported by architect/package@6.2.0-RC.1 on 2021-03-16T19:07:14.851Z
 Resources:
   HTTP:
     Type: AWS::Serverless::HttpApi
@@ -148,6 +148,18 @@ Resources:
             - {}
       Roles:
       - Ref: Role
+  PluginBucketOne:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: init-one-staging
+  PluginBucketTwo:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: init-two-staging
+  PluginBucketThree:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: init-three-staging
 Outputs:
   API:
     Description: API Gateway (HTTP)
