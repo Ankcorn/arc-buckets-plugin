@@ -1,7 +1,7 @@
 const S3rver = require('s3rver');
 // const path = require('path');
 // const { invokeLambda } = require('@architect/sandbox');
-
+const { toLogicalID } = require('@architect/utils');
 const defaultLocalOptions = {
     port: 4569,
     address: 'localhost',
@@ -12,22 +12,23 @@ const defaultLocalOptions = {
 };
 let s3Instance;
 module.exports = {
-    package: function extendCloudFormation (arc, sam, stage = 'staging', inventory) {
+    package ({ arc, cloudformation, stage = 'staging', inventory }) {
+        console.log(arc, cloudformation);
         if (!arc.buckets) {
-            return sam;
+            return cloudformation;
         }
+        console.log(toLogicalID('blahah'));
+        // for (let bucket of arc.buckets) {
 
-        for (let bucket of arc.buckets) {
+        //     sam.resources[bucket] = {
+        //         Type: 'AWS::S3::Bucket',
+        //         Properties: {
+        //             BucketName: `arc-${bucket}-${stage}`
+        //         }
+        //     };
+        // }
 
-            sam.resources[bucket] = {
-                Type: 'AWS::S3::Bucket',
-                Properties: {
-                    BucketName: `arc-${bucket}-${stage}`
-                }
-            };
-        }
-
-        return sam;
+        return cloudformation;
     },
     //     pluginFunctions: function createBucketEventHandlers (arc, inventory) {
 

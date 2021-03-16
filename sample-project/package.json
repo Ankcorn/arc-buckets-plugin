@@ -5,12 +5,13 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "dev": "sandbox"
+    "dev": "sandbox",
+    "dry-run": "arc deploy --dry-run"
   },
   "author": "Thomas Ankcorn <thomasankcorn@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "@architect/architect": "^8.5.0-RC.0",
-    "arc-buckets-plugin": "0.0.2"
+    "@architect/architect": "^8.5.0-RC.3",
+    "arc-buckets-plugin": "file:.."
   }
 }

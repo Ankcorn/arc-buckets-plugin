@@ -6,13 +6,19 @@ get /
 
 @buckets
 one 
-	triggers s3:ObjectCreated:*
+	# triggers s3:ObjectCreated:*
 	visibility private
-	existing true
+	# existing true
+
+two
+	visibilty public
+
+three
 
 @plugins
 arc-buckets-plugin
-# @aws
-# profile default
-# region us-west-1
+
+@aws
+profile PERSONAL
+region eu-west-1
   
