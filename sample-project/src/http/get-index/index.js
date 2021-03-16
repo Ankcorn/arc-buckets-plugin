@@ -1,5 +1,11 @@
 // learn more about HTTP functions here: https://arc.codes/primitives/http
+const buckets = require('@architect/shared/buckets');
+console.log(buckets);
 exports.handler = async function http (req) {
+    await buckets.one.put('hello.txt', 'hello');
+    console.log(await buckets.one.get('hello.txt'));
+
+
     return {
         statusCode: 200,
         headers: {

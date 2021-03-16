@@ -21,9 +21,10 @@ const runningLocally = process.env.NODE_ENV === 'testing';
 const config = runningLocally ? {
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
-    endpoint: 'http://127.0.0.1:4569'
+    endpoint: 'http://127.0.0.1:4569',
+		s3ForcePathStyle: true
 } : {};
-
+console.log(config)
 const s3 = new S3(config);
 
 ${clients.join('\n')}

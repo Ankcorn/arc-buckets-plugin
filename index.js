@@ -6,8 +6,8 @@ const defaultLocalOptions = {
     port: 4569,
     address: 'localhost',
     directory: './buckets',
-    accessKeyId: 'I_AM_ARCHITECT',
-    secretAccessKey: 'I_AM_ARCHITECT',
+    accessKeyId: 'S3RVER',
+    secretAccessKey: 'S3RVER',
     resetOnClose: true
 };
 let s3Instance;
@@ -40,7 +40,7 @@ module.exports = {
             src: path.join(cwd, './src/shared/buckets'),
             body: createClients(arc.buckets.map(name => ({
                 clientName: name,
-                bucketName: '${stackName}-${name}-'
+                bucketName: `${stackName}-${name}-`
             })))
         } ];
     },
