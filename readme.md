@@ -62,7 +62,6 @@ async function handler(req) {
 
 ## TODO
 
-* fix different content types support (images)
 * Add support for bucket events
 * Add list and delete methods to the client
 * Add support for s3 buckets that already exist
