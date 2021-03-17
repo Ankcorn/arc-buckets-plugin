@@ -24,7 +24,6 @@ const config = runningLocally ? {
     endpoint: 'http://127.0.0.1:4569',
 		s3ForcePathStyle: true
 } : {};
-console.log(config)
 const s3 = new S3(config);
 
 ${clients.join('\n')}

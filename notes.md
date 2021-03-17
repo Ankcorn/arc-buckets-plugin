@@ -11,7 +11,7 @@ https://github.com/architect/arc.codes/pull/324
 my-arc-app
 
 @buckets
-bucket-1 s3:ObjectCreated:*
+bucket-1
 bucket-2
 
 @http
@@ -117,4 +117,19 @@ delete
     };`
             };
         });
+```
+
+
+```javascript
+ // let bucketEventSrcs = module.exports.pluginFunctions(arc, inventory).map(bucketEvent => bucketEvent.src);
+            // console.log(bucketEventSrcs);
+            // // const bucketNames = bucketEventSrcs.map(str => str.replace('test/src/buckets/', ''))
+            // // console.log(bucketNames)
+            // s3Instance.on('event', (e) => {
+            //     const { s3: { bucket }, eventName } = e.Records[0];
+            //     console.log(bucket);
+            //     if (bucketNames.includes(bucket.name)) {
+            //         invokeLambda ? invokeLambda(e) : console.log(e);
+            //     }
+            // });
 ```
