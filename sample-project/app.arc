@@ -5,7 +5,7 @@ init
 get /
 
 @buckets
-one 
+pictures
 
 two
 
