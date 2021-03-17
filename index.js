@@ -1,8 +1,9 @@
 const S3rver = require('s3rver');
 const path = require('path');
 const { toLogicalID } = require('@architect/utils');
+const fs = require('fs-extra');
+
 const createClients = require('./client');
-const buckets = require('./sample-project/src/shared/buckets');
 const defaultLocalOptions = {
     port: 4569,
     address: 'localhost',
@@ -46,21 +47,25 @@ module.exports = {
         return cloudformation;
     },
     pluginFunctions ({ arc, inventory }) {
-        if (!arc.buckets) return [];
-        const [ stackName ] = arc.app;
-        const cwd = inventory.inv._project.src;
-
-
-        return [ {
-            src: path.join(cwd, './src/shared/buckets'),
-            body: createClients(arc.buckets.map(name => ({
-                clientName: name,
-                bucketName: `${stackName}-${name}-`
-            })))
-        } ];
+        console.log('pluginFunctions', arc)
+        if (arc.buckets) {
+            const [ stackName ] = arc.app;
+            const cwd = inventory.inv._project.src;
+            try {
+                fs.outputFileSync(path.join(cwd, './src/shared/buckets.js'), createClients(arc.buckets.map(name => ({
+                    clientName: name,
+                    bucketName: `${stackName}-${name}-`
+                }))))
+            } catch(e) {
+                console.log(e)
+            }
+          
+        }
+       return []
     },
     sandbox: {
         async start ({ arc }) {
+            console.log(arc)
             const [ stackName ] = arc.app;
             if (arc.buckets) {
                 s3Instance = new S3rver({ configureBuckets: arc.buckets.map((bucketName) => ({ name: `${stackName}-${bucketName}-testing` })), ...defaultLocalOptions });

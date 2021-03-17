@@ -5,7 +5,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "dev": "sandbox",
+    "dev": "sandbox start",
     "create": "arc create",
     "dry-run": "arc deploy --dry-run",
     "deploy": "arc deploy"

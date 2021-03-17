@@ -5,11 +5,11 @@ init
 get /
 
 @buckets
-pictures
+one 
 
-two
+cats
 
-three
+dogs
 
 @plugins
 arc-buckets-plugin
