@@ -5,17 +5,23 @@ const ${clientName} = {
 	bucketName: '${bucketName}' + process.env.NODE_ENV,
 	async get (key) {
 			const response = await s3.getObject({ Bucket: this.bucketName, Key: key }).promise();
-			return response.Body.toString();
+
+			return {
+				contentType: response.ContentType,
+				eTag: response.ETag,
+				data: response.Body.toString(response.ContentType.includes('image') ? 'base64' : 'utf-8')
+			}
 	},
 	async put (key, blob) {
-			await s3.putObject({ Bucket: this.bucketName, Key: key, Body: blob }).promise();
+			const ContentType = mime.lookup(key);
+			await s3.putObject({ Bucket: this.bucketName, Key: key, Body: blob, ContentType  }).promise();
 	}
 };
 `);
 
-    const template = `
+    const code = `
 const S3 = require('aws-sdk/clients/s3');
-
+const mime = require('mime-types');
 const runningLocally = process.env.NODE_ENV === 'testing';
 
 const config = runningLocally ? {
@@ -35,8 +41,24 @@ const buckets = {
 module.exports = buckets;
 
 `;
+    const types = `
+declare type client = {
+		bucketName: string;
+		get(key: any): Promise<{
+				contentType: string;
+				eTag: string;
+				data: string;
+		}>;
+		put(key: any, blob: any): Promise<void>;
+};
 
-    return template;
+declare const buckets: {
+		${buckets.map(({ clientName }) => `${clientName}: client`).join(', ')}
+};
+	
+export = buckets		
+`;
+    return { code, types };
 }
 
 module.exports = createClients;

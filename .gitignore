@@ -1,3 +1,5 @@
 node_modules
 .DS_Store
 buckets
+sample-project/sam.json
+sample-project/sam.yaml

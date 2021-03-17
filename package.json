@@ -1,6 +1,6 @@
 {
   "name": "arc-buckets-plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Make buckets and use them for good stuff!",
   "main": "index.js",
   "author": "Thomas Ankcorn <thomasankcorn@gmail.com>",
@@ -19,6 +19,7 @@
     "@architect/package": "^6.2.0-RC.0",
     "@architect/sandbox": "^3.4.0-RC.0",
     "@architect/utils": "^2.0.4",
+    "mime-types": "^2.1.29",
     "s3rver": "^3.6.1"
   },
   "eslintConfig": {
