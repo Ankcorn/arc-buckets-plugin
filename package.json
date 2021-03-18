@@ -17,8 +17,9 @@
   },
   "dependencies": {
     "@architect/package": "^6.2.0-RC.0",
-    "@architect/sandbox": "^3.4.0-RC.0",
+    "@architect/sandbox": "^3.4.0-RC.2",
     "@architect/utils": "^2.0.4",
+    "camelcase": "^6.2.0",
     "mime-types": "^2.1.29",
     "s3rver": "^3.6.1"
   },

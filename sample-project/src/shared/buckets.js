@@ -12,26 +12,8 @@ const config = runningLocally ? {
 const s3 = new S3(config);
 
 
-const one = {
-	bucketName: 'init-one-' + process.env.NODE_ENV,
-	async get (key) {
-			const response = await s3.getObject({ Bucket: this.bucketName, Key: key }).promise();
-
-			return {
-				contentType: response.ContentType,
-				eTag: response.ETag,
-				data: response.Body.toString(response.ContentType.includes('image') ? 'base64' : 'utf-8')
-			}
-	},
-	async put (key, blob) {
-			const ContentType = mime.lookup(key);
-			await s3.putObject({ Bucket: this.bucketName, Key: key, Body: blob, ContentType  }).promise();
-	}
-};
-
-
-const cats = {
-	bucketName: 'init-cats-' + process.env.NODE_ENV,
+const oneTwo = {
+	bucketName: 'init-one-two-' + process.env.NODE_ENV,
 	async get (key) {
 			const response = await s3.getObject({ Bucket: this.bucketName, Key: key }).promise();
 
@@ -67,7 +49,7 @@ const dogs = {
 
 
 const buckets = {
-    one, cats, dogs
+    oneTwo, dogs
 };
 
 module.exports = buckets;

@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Transform": "AWS::Serverless-2016-10-31",
-  "Description": "Exported by architect/package@6.0.4 on 2021-03-17T13:54:08.517Z",
+  "Description": "Exported by architect/package@6.2.0-RC.1 on 2021-03-18T21:30:27.156Z",
   "Resources": {
     "HTTP": {
       "Type": "AWS::Serverless::HttpApi",
@@ -183,6 +183,28 @@
                 }
               ]
             }
+          },
+          {
+            "PolicyName": "ArcBucketsPlugin",
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:PutObject"
+                  ],
+                  "Resource": [
+                    "arn:aws:s3:::init-one-two-staging",
+                    "arn:aws:s3:::init-one-two-staging/*",
+                    "arn:aws:s3:::init-cats-staging",
+                    "arn:aws:s3:::init-cats-staging/*",
+                    "arn:aws:s3:::init-dogs-staging",
+                    "arn:aws:s3:::init-dogs-staging/*"
+                  ]
+                }
+              ]
+            }
           }
         ]
       }
@@ -243,6 +265,24 @@
             "Ref": "Role"
           }
         ]
+      }
+    },
+    "PluginBucketOneTwo": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "init-one-two-staging"
+      }
+    },
+    "PluginBucketCats": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "init-cats-staging"
+      }
+    },
+    "PluginBucketDogs": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "init-dogs-staging"
       }
     }
   },

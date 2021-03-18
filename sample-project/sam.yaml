@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Exported by architect/package@6.2.0-RC.1 on 2021-03-16T19:07:14.851Z
+Description: Exported by architect/package@6.2.0-RC.1 on 2021-03-18T21:30:27.156Z
 Resources:
   HTTP:
     Type: AWS::Serverless::HttpApi
@@ -38,7 +38,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      CodeUri: s3://init-cfn-deployments-e03e3/af1bd725801a1e4902db2d9caaf7c22b
+      CodeUri: s3://init-cfn-deployments-e03e3/d2e651a058111b1aa46b141605056875
       Runtime: nodejs12.x
       MemorySize: 1152
       Timeout: 5
@@ -114,6 +114,20 @@ Resources:
               - arn:aws:s3:::${bukkit}/*
               - bukkit:
                   Ref: StaticBucket
+      - PolicyName: ArcBucketsPlugin
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action:
+            - s3:GetObject
+            - s3:PutObject
+            Resource:
+            - arn:aws:s3:::init-one-two-staging
+            - arn:aws:s3:::init-one-two-staging/*
+            - arn:aws:s3:::init-cats-staging
+            - arn:aws:s3:::init-cats-staging/*
+            - arn:aws:s3:::init-dogs-staging
+            - arn:aws:s3:::init-dogs-staging/*
   StaticBucketParam:
     Type: AWS::SSM::Parameter
     Properties:
@@ -148,18 +162,18 @@ Resources:
             - {}
       Roles:
       - Ref: Role
-  PluginBucketOne:
+  PluginBucketOneTwo:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: init-one-staging
-  PluginBucketTwo:
+      BucketName: init-one-two-staging
+  PluginBucketCats:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: init-two-staging
-  PluginBucketThree:
+      BucketName: init-cats-staging
+  PluginBucketDogs:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: init-three-staging
+      BucketName: init-dogs-staging
 Outputs:
   API:
     Description: API Gateway (HTTP)

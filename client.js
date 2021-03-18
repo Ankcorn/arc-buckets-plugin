@@ -1,8 +1,8 @@
 
 function createClients (buckets) {
-    const clients = buckets.map(({ bucketName, clientName }) => `
-const ${clientName} = {
-	bucketName: '${bucketName}' + process.env.NODE_ENV,
+    const clients = buckets.map(({ name, client }) => `
+const ${client} = {
+	bucketName: '${name},
 	async get (key) {
 			const response = await s3.getObject({ Bucket: this.bucketName, Key: key }).promise();
 
@@ -35,7 +35,7 @@ const s3 = new S3(config);
 ${clients.join('\n')}
 
 const buckets = {
-    ${buckets.map(({ clientName }) => clientName).join(', ')}
+    ${buckets.map(({ client }) => client).join(', ')}
 };
 
 module.exports = buckets;
@@ -53,7 +53,7 @@ declare type client = {
 };
 
 declare const buckets: {
-		${buckets.map(({ clientName }) => `${clientName}: client`).join(', ')}
+		${buckets.map(({ client }) => `${client}: client`).join(', ')}
 };
 	
 export = buckets		

@@ -5,9 +5,8 @@ init
 get /
 
 @buckets
-one 
-
-cats
+one-two
+	triggers create
 
 dogs
 
