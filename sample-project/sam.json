@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Transform": "AWS::Serverless-2016-10-31",
-  "Description": "Exported by architect/package@6.2.0-RC.1 on 2021-03-18T21:30:27.156Z",
+  "Description": "Exported by architect/package@6.2.0-RC.1 on 2021-03-19T10:21:21.765Z",
   "Resources": {
     "HTTP": {
       "Type": "AWS::Serverless::HttpApi",
@@ -197,8 +197,6 @@
                   "Resource": [
                     "arn:aws:s3:::init-one-two-staging",
                     "arn:aws:s3:::init-one-two-staging/*",
-                    "arn:aws:s3:::init-cats-staging",
-                    "arn:aws:s3:::init-cats-staging/*",
                     "arn:aws:s3:::init-dogs-staging",
                     "arn:aws:s3:::init-dogs-staging/*"
                   ]
@@ -270,19 +268,83 @@
     "PluginBucketOneTwo": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
-        "BucketName": "init-one-two-staging"
-      }
-    },
-    "PluginBucketCats": {
-      "Type": "AWS::S3::Bucket",
-      "Properties": {
-        "BucketName": "init-cats-staging"
+        "BucketName": "init-one-two-staging",
+        "NotificationConfiguration": {
+          "LambdaConfigurations": [
+            {
+              "Event": "s3:ObjectCreated:*",
+              "Function": {
+                "Fn::GetAtt": [
+                  "BucketsOneTwoCreatePluginLambda",
+                  "Arn"
+                ]
+              }
+            }
+          ]
+        }
       }
     },
     "PluginBucketDogs": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "BucketName": "init-dogs-staging"
+      }
+    },
+    "BucketsOneTwoCreatePluginLambda": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.handler",
+        "CodeUri": "/Users/thomasankorn/projects/arc-buckets-plugin/sample-project/src/buckets/one-two-create",
+        "Runtime": "nodejs12.x",
+        "MemorySize": 1152,
+        "Timeout": 5,
+        "Environment": {
+          "Variables": {
+            "ARC_APP_NAME": "init",
+            "ARC_CLOUDFORMATION": {
+              "Ref": "AWS::StackName"
+            },
+            "ARC_ENV": "staging",
+            "ARC_HTTP": "aws_proxy",
+            "ARC_ROLE": {
+              "Ref": "Role"
+            },
+            "NODE_ENV": "staging",
+            "SESSION_TABLE_NAME": "jwe",
+            "ARC_STATIC_BUCKET": {
+              "Ref": "StaticBucket"
+            }
+          }
+        },
+        "Role": {
+          "Fn::Sub": [
+            "arn:aws:iam::${AWS::AccountId}:role/${roleName}",
+            {
+              "roleName": {
+                "Ref": "Role"
+              }
+            }
+          ]
+        },
+        "Events": {}
+      }
+    },
+    "BucketsOneTwoCreatePluginLambdaInvokePermission": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": "BucketsOneTwoCreatePluginLambda",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "BucketsOneTwoCreatePluginLambda",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "s3.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId"
+        },
+        "SourceArn": "arn:aws:s3:::init-one-two-staging"
       }
     }
   },

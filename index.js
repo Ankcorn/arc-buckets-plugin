@@ -1,6 +1,7 @@
 const S3rver = require('s3rver');
 const path = require('path');
 let invokeLambda = require('@architect/sandbox/invokeLambda');
+const createLambdaJSON = require('@architect/package/createLambdaJSON');
 const { toLogicalID } = require('@architect/utils');
 const fs = require('fs-extra');
 const camelcase = require('camelcase');
@@ -41,7 +42,8 @@ function parseBuckets (arc, stage) {
 }
 
 module.exports = {
-    package ({ arc, cloudformation, stage = 'staging' }) {
+    package ({ arc, cloudformation, stage = 'staging', inventory }) {
+        const cwd = inventory.inv._project.src;
         if (!arc.buckets) {
             return cloudformation;
         }
@@ -69,6 +71,40 @@ module.exports = {
                 ]
             }
         });
+
+        for (let bucket of buckets.filter(b => b.settings && b.settings.triggers)) {
+
+
+
+
+            /** Add Lambda to be invoked */
+            const src = path.join(cwd, 'src', 'buckets', bucket.lambda);
+            const [ functionName, functionDef ] = createLambdaJSON({ inventory, src  });
+            cloudformation.Resources[functionName] = functionDef;
+
+            /** Add Lambda permission so s3 can invoke it */
+
+            cloudformation.Resources[`${functionName}InvokePermission`] = {
+                Type: 'AWS::Lambda::Permission',
+                DependsOn: functionName,
+                Properties: {
+                    FunctionName: { 'Fn::GetAtt': [ functionName, 'Arn' ] },
+                    Action: 'lambda:InvokeFunction',
+                    Principal: 's3.amazonaws.com',
+                    SourceAccount: { Ref: 'AWS::AccountId' },
+                    SourceArn: `arn:aws:s3:::${bucket.name}`
+                }
+            };
+
+            /** Add s3 Notification Configuration so it knows when to invoke the lambda */
+
+            cloudformation.Resources[bucket.resource].Properties.NotificationConfiguration = {
+                LambdaConfigurations: [ {
+                    Event: bucket.settings.triggers === 'create' ? 's3:ObjectCreated:*' : 's3:ObjectRemoved:*',
+                    Function:  { 'Fn::GetAtt': [ functionName, 'Arn' ] }
+                } ]
+            };
+        }
 
         return cloudformation;
     },
@@ -100,14 +136,13 @@ module.exports = {
                 await s3Instance.run();
 
                 s3Instance.on('event', (e) => {
-                    console.log(e);
                     const { eventName, s3: { bucket: { name } } } = e.Records[0];
-                    console.log(name);
                     const bucket = buckets.find(bucket => bucket.name === name);
                     if (bucket.settings && bucket.settings.triggers && eventName.toLowerCase().includes(bucket.settings.triggers)) {
-                        console.log('should invoke');
                         const src = path.join(cwd, 'src', 'buckets', bucket.lambda);
-                        invokeLambda({ inventory, src, payload: e }, (err, resp) => console.log(err, resp));
+                        invokeLambda({ inventory, src, payload: e }, (e) => {
+                            if (e) console.log(e);
+                        });
                     }
                 });
             }

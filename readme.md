@@ -60,9 +60,21 @@ async function handler(req) {
 }
 ```
 
+### Triggers
+
+Invoking lambdas for ObjectCreated or ObjectRemoved events is supported. To create a lambda that will be invoked for one of these events add triggers to the bucket.
+
+```arc
+@buckets
+dogs
+	triggers create
+
+cats
+	triggers remove
+```
+
 ## TODO
 
-* Add support for bucket events
 * Add list and delete methods to the client
 * Add support for s3 buckets that already exist
 * Add suport for bucket visibilty options

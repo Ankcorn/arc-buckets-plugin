@@ -1,6 +1,6 @@
 {
   "name": "arc-buckets-plugin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Make buckets and use them for good stuff!",
   "main": "index.js",
   "author": "Thomas Ankcorn <thomasankcorn@gmail.com>",
@@ -16,7 +16,7 @@
     "jasmine": "^3.6.4"
   },
   "dependencies": {
-    "@architect/package": "^6.2.0-RC.0",
+    "@architect/package": "^6.2.0-RC.1",
     "@architect/sandbox": "^3.4.0-RC.2",
     "@architect/utils": "^2.0.4",
     "camelcase": "^6.2.0",
