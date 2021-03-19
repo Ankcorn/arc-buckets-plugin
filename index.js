@@ -74,16 +74,12 @@ module.exports = {
 
         for (let bucket of buckets.filter(b => b.settings && b.settings.triggers)) {
 
-
-
-
             /** Add Lambda to be invoked */
             const src = path.join(cwd, 'src', 'buckets', bucket.lambda);
             const [ functionName, functionDef ] = createLambdaJSON({ inventory, src  });
             cloudformation.Resources[functionName] = functionDef;
 
             /** Add Lambda permission so s3 can invoke it */
-
             cloudformation.Resources[`${functionName}InvokePermission`] = {
                 Type: 'AWS::Lambda::Permission',
                 DependsOn: functionName,
@@ -97,7 +93,6 @@ module.exports = {
             };
 
             /** Add s3 Notification Configuration so it knows when to invoke the lambda */
-
             cloudformation.Resources[bucket.resource].Properties.NotificationConfiguration = {
                 LambdaConfigurations: [ {
                     Event: bucket.settings.triggers === 'create' ? 's3:ObjectCreated:*' : 's3:ObjectRemoved:*',

@@ -10,7 +10,7 @@ declare type client = {
 };
 
 declare const buckets: {
-		oneTwo: client, dogs: client
+		myAwesomeBucket: client, oneTwo: client, dogs: client
 };
 	
 export = buckets		

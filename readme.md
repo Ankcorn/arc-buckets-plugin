@@ -25,7 +25,7 @@ const profilePic = await buckets.pictures.get('ankcorn/profile.jpg')
 
 ## Usage
 
-Define as many buckets as you want under a `@buckets` section
+Each bucket you define under the `@buckets` section will be created in AWS.
 
 ```arc
 @buckets
@@ -33,7 +33,7 @@ pictures
 kittens
 ```
 
-To do something to bucket use the generated sdk found at `src/shared/buckets`.
+To do something to bucket use the generated client found at `src/shared/buckets`.
 
 For example:
 
@@ -71,6 +71,19 @@ dogs
 
 cats
 	triggers remove
+```
+
+### Opt out of the client and use the aws-sdk
+
+The generated client found at `@architect/shared/buckets` will cover common usecases but sometimes you need to do something only supported by the aws-sdk. The generated client will still help you set this up correctly and make sure the sandbox works.
+
+```javascript
+const buckets = require('@architect/shared/buckets');
+const S3 = require('aws-sdk/clients/s3');
+
+const s3 = new S3(buckets.awsConfig);
+
+s3.getObject({ Bucket: buckets.dogs.bucketName, Key: '...' })
 ```
 
 ## TODO

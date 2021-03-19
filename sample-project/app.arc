@@ -5,6 +5,9 @@ init
 get /
 
 @buckets
+
+my-awesome-bucket
+
 one-two
 	triggers create
 

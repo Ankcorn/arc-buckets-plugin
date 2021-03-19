@@ -1,6 +1,6 @@
-
 const buckets = require('@architect/shared/buckets');
-exports.handler = async function http (req) {
+
+exports.handler = async function http () {
     await buckets.oneTwo.put('hello.txt', JSON.stringify({ message: 'test' }));
     const file = await buckets.oneTwo.get('hello.txt');
     return {

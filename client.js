@@ -24,13 +24,13 @@ const S3 = require('aws-sdk/clients/s3');
 const mime = require('mime-types');
 const runningLocally = process.env.NODE_ENV === 'testing';
 
-const config = runningLocally ? {
+const awsConfig = runningLocally ? {
     accessKeyId: 'S3RVER',
     secretAccessKey: 'S3RVER',
     endpoint: 'http://127.0.0.1:4569',
 		s3ForcePathStyle: true
 } : {};
-const s3 = new S3(config);
+const s3 = new S3(awsConfig);
 
 ${clients.join('\n')}
 
@@ -53,7 +53,7 @@ declare type client = {
 };
 
 declare const buckets: {
-		${buckets.map(({ client }) => `${client}: client`).join(', ')}
+		${buckets.map(({ client }) => `${client}: client`).join(', ')}, awsConfig
 };
 	
 export = buckets		
