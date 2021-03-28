@@ -1,6 +1,6 @@
 {
   "name": "arc-buckets-plugin",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Make buckets and use them for good stuff!",
   "main": "index.js",
   "author": "Thomas Ankcorn <thomasankcorn@gmail.com>",
